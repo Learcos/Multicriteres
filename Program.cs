@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Multicritères {
     class Program {
@@ -35,6 +36,16 @@ namespace Multicritères {
             int[, ] matriceSeuils = new int[nbSeuils, nbCriteres] { { 1, 1, 1, 1, 1 }, { 25, 16, 0, 12, 10 }, { 50, 24, 1, 24, 20 }, { 100, 60, 2, 48, 90 }
             };
             return matriceSeuils;
+        }
+
+        public static List<List<int>> initialiseListeProjets (int nbProjets) {
+            List<List<int>> projets = new List<List<int>> ();
+            for (int i = 0; i < nbProjets; i++) {
+                List<int> rangProjet = new List<int> ();
+                rangProjet.Add (i);
+                projets.Add (rangProjet);
+            }
+            return projets;
         }
 
         public static double[, ] calculeMatriceConcordance (int[, ] matricePerf, int[, ] matriceSeuils, int nbProjets, int nbCriteres) {
@@ -207,53 +218,203 @@ namespace Multicritères {
             return qualifs;
         }
 
-        public static int calculeQualifMinMax(Dictionary<int, int> qualifs, Func<int, int, int> function){
+        public static int calculeQualifMinMax (Dictionary<int, int> qualifs, Func<int, int, int> function) {
             int qualifMinMax = 0;
-            foreach (KeyValuePair<int,int> item in qualifs)
-            {
-                qualifMinMax = function(qualifMinMax, item.Value);
+            foreach (KeyValuePair<int, int> item in qualifs) {
+                qualifMinMax = function (qualifMinMax, item.Value);
             }
             return qualifMinMax;
         }
 
-        /*public static List<List<int>> distillationAscendante (Dictionary<int, int> qualifs, int[,] matriceSurclassement, int nbProjets){
-            int qualifMin = calculeQualifMinMax(qualifs, Math.Min);
-            List<List<int>> resultat = new List<List<int>>();
-            List<int> projetsQualifMin = new List<int>();
-            List<int> rangsProjetsPasMin = new List<int>();
-            Dictionary<int, int> newQualifs = new Dictionary<int,int>();
-            foreach (KeyValuePair element in qualifs)
-            {
-                if(item.Value == qualifMin){
-                    projetsQualifMin.Add(element.Key);
-                }
-                else{
-                    rangsProjetsPasMin.Add(element.Key);
+        /*public static List<List<int>> distillationAscendante (List<List<int>> projets, Dictionary<int, int> qualifs, int[, ] matriceSurclassement, int nbProjets) {
+            List<List<int>> projetsClasses = new List<List<int>> ();
+            List<int> rangsProjetsClasses = new List<int> ();
+            List<List<int>> projetsResiduels = new List<List<int>> ();
+            List<int> rangsProjetsResiduels = new List<int> ();
+            Dictionary<int, int> newQualifs = new Dictionary<int, int> ();
+
+            int qualifMin = calculeQualifMinMax (qualifs, Math.Min);
+
+            //classement des projets de + faible qualification dans rangsProjetsClasses
+            foreach (KeyValuePair<int, int> element in qualifs) {
+                if (element.Value == qualifMin) {
+                    rangsProjetsClasses.Add (element.Key);
+                } else {
+                    rangsProjetsResiduels.Add (element.Key);
                 }
             }
-            if(projetsQualifMin.Count > 1){
-                newQualifs = calculeQualifs(matriceSurclassement, nbProjets, rangsProjetsPasMin);
-                //on cherche à savoir si toutes les valeurs de qualification sont les mêmes
-                //auquel cas on ne distille plus les projets
-                int firstQualifValue = newQualifs.First().Value;
-                bool valeursToutesEgales = true;
-                foreach (KeyValuePair element in newQualifs)
-                {
-                    if(element.Value != firstQualifValue){
-                        valeursToutesEgales = false;
-                        break;
+            if (rangsProjetsClasses.Count > 0) {
+                //si 1 seul projet est à la qualification min
+                if (rangsProjetsClasses.Count == 1) {
+                    //on le classe
+                    projetsClasses.Add (rangsProjetsClasses);
+                    foreach (int item in rangsProjetsResiduels) {
+                        List<int> listTemp = new List<int> ();
+                        listTemp.Add (item);
+                        projetsResiduels.Add (listTemp);
+                    }
+                    //on recalcule les qualifications en évitant les projets déjà classés
+                    newQualifs = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsClasses);
+                    //on fait la même chose pour les projets residuels
+                    do {
+                        distillationAscendante (projetsResiduels, newQualifs, matriceSurclassement, nbProjets);
+                    } while (rangsProjetsClasses.Count < nbProjets);
+                }
+                //si plusieurs projets ont la qualif min, on cherche à les distiller entre eux
+                else {
+                    //on recalcule les qualifications pour l'ensemble des projetsClasses
+                    //càd en évitant les projetsResiduels
+                    Dictionary<int, int> newQualifs2 = new Dictionary<int, int> ();
+                    Dictionary<int, int> newQualifs3 = new Dictionary<int, int> ();
+                    newQualifs2 = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsResiduels);
+                    //on cherche à savoir si toutes les valeurs de qualification sont les mêmes
+                    //auquel cas on ne distille plus les projets
+                    int firstQualifValue = newQualifs2.First ().Value;
+                    bool valeursToutesEgales = true;
+                    foreach (KeyValuePair<int, int> element in newQualifs2) {
+                        if (element.Value != firstQualifValue) {
+                            valeursToutesEgales = false;
+                            break;
+                        }
+                    }
+                    if (valeursToutesEgales) {
+                        projetsClasses.Add (rangsProjetsClasses);
+                        foreach (int item in rangsProjetsResiduels) {
+                            List<int> listTemp = new List<int> ();
+                            listTemp.Add (item);
+                            projetsResiduels.Add (listTemp);
+                        }
+                        //on recalcule les qualifications en évitant les projets déjà classés
+                        newQualifs3 = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsClasses);
+                        //on fait la même chose pour les projets residuels
+                        do {
+                            distillationAscendante (projetsResiduels, newQualifs3, matriceSurclassement, nbProjets);
+                        } while (!valeursToutesEgales && rangsProjetsClasses.Count > 1);
+                    } else {
+                        do {
+                            distillationAscendante (projetsClasses, newQualifs2, matriceSurclassement, nbProjets);
+                        } while (!valeursToutesEgales && rangsProjetsClasses.Count > 1);
                     }
                 }
-                do{
-                    return distillationAscendante(newQualifs, matriceSurclassement, nbProjets)
-                } while(!valeursToutesEgales && projetsQualifMin.Count > 0);
             }
-            else{
-                do{
-                    return distillationAscendante(qualifs)
+            //projets <- projets - projetsClasses
+            projets = projetsClasses;
+        }*/
+
+        public static int[, ] supprimeElementsMatrice (int[, ] matrice, int matriceSize, int rank) {
+            int[, ] newMatrice = new int[matriceSize - 1, matriceSize - 1];
+            int ligne = 0;
+            int colonne = 0;
+
+            for (int i = 0; i < matriceSize; i++) {
+                if (i != rank) {
+                    if (i < rank) ligne = i;
+                    else ligne = i - 1;
+                    for (int j = 0; j < matriceSize; j++) {
+                        if (j != rank) {
+                            if (j < rank) colonne = j;
+                            else colonne = j - 1;
+                            newMatrice[ligne, colonne] = matrice[i, j];
+                        }
+                    }
                 }
             }
-        }*/
+            return newMatrice;
+        }
+
+        public static double[, ] supprimeElementsMatrice (double[, ] matrice, int matriceSize, List<int> rangsA_Delete) {
+            double[, ] newMatrice = new double[matriceSize, matriceSize];
+            //tri en ordre croissant puis reverse = ordre décroissant
+            rangsA_Delete.Sort ();
+            rangsA_Delete.Reverse ();
+            foreach (int rank in rangsA_Delete) {
+                for (int i = 0; i < matriceSize; i++) {
+                    if (i != rank) {
+                        for (int j = 0; j < matriceSize; j++) {
+                            if (j != rank) {
+                                newMatrice[i, j] = matrice[i, j];
+                            }
+                        }
+                    }
+                }
+            }
+            return newMatrice;
+        }
+
+        /*public static List<List<int>> distillationAscendante2 (Dictionary<int, int> qualifs, int[, ] matriceSurclassement, int nbProjets) {
+                List<List<int>> projetsClasses = new List<List<int>> ();
+                List<int> rangsProjetsClasses = new List<int> ();
+                List<List<int>> projetsResiduels = new List<List<int>> ();
+                List<int> rangsProjetsResiduels = new List<int> ();
+
+                Dictionary<int, int> newQualifs = new Dictionary<int, int> ();
+                int qualifMin = calculeQualifMinMax (qualifs, Math.Min);
+
+                //classement des projets de + faible qualification dans rangsProjetsClasses
+                foreach (KeyValuePair<int, int> element in qualifs) {
+                    if (element.Value == qualifMin) {
+                        rangsProjetsClasses.Add (element.Key);
+                    } else {
+                        rangsProjetsResiduels.Add (element.Key);
+                    }
+                }
+                if (rangsProjetsClasses.Count > 0) {
+                    //si 1 seul projet est à la qualification min
+                    if (rangsProjetsClasses.Count == 1) {
+                        //on le classe
+                        projetsClasses.Add (rangsProjetsClasses);
+                        foreach (int item in rangsProjetsResiduels) {
+                            List<int> listTemp = new List<int> ();
+                            listTemp.Add (item);
+                            projetsResiduels.Add (listTemp);
+                        }
+                        //on recalcule les qualifications en évitant les projets déjà classés
+                        newQualifs = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsClasses);
+                        //on fait la même chose pour les projets residuels
+                        do {
+                            distillationAscendante (projetsResiduels, newQualifs, matriceSurclassement, nbProjets);
+                        } while (rangsProjetsClasses.Count < nbProjets);
+                    }
+                    //si plusieurs projets ont la qualif min, on cherche à les distiller entre eux
+                    else {
+                        //on recalcule les qualifications pour l'ensemble des projetsClasses
+                        //càd en évitant les projetsResiduels
+                        Dictionary<int, int> newQualifs2 = new Dictionary<int, int> ();
+                        Dictionary<int, int> newQualifs3 = new Dictionary<int, int> ();
+                        newQualifs2 = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsResiduels);
+                        //on cherche à savoir si toutes les valeurs de qualification sont les mêmes
+                        //auquel cas on ne distille plus les projets
+                        int firstQualifValue = newQualifs2.First ().Value;
+                        bool valeursToutesEgales = true;
+                        foreach (KeyValuePair<int, int> element in newQualifs2) {
+                            if (element.Value != firstQualifValue) {
+                                valeursToutesEgales = false;
+                                break;
+                            }
+                        }
+                        if (valeursToutesEgales) {
+                            projetsClasses.Add (rangsProjetsClasses);
+                            foreach (int item in rangsProjetsResiduels) {
+                                List<int> listTemp = new List<int> ();
+                                listTemp.Add (item);
+                                projetsResiduels.Add (listTemp);
+                            }
+                            //on recalcule les qualifications en évitant les projets déjà classés
+                            newQualifs3 = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsClasses);
+                            //on fait la même chose pour les projets residuels
+                            do {
+                                distillationAscendante (projetsResiduels, newQualifs3, matriceSurclassement, nbProjets);
+                            } while (!valeursToutesEgales && rangsProjetsClasses.Count > 1);
+                        } else {
+                            do {
+                                distillationAscendante (projetsClasses, newQualifs2, matriceSurclassement, nbProjets);
+                            } while (!valeursToutesEgales && rangsProjetsClasses.Count > 1);
+                        }
+                    }
+                }
+                //projets <- projets - projetsClasses
+                projets = projetsClasses;
+            }*/
 
         public static void afficheMatrice (int[, ] matrice, int nbColonnes, int nbCriteres) {
             for (int i = 0; i < nbColonnes; i++) {
@@ -275,32 +436,56 @@ namespace Multicritères {
 
         static void Main (string[] args) {
             int nbProjets = 5, nbCriteres = 5, nbSeuils = 4;
+
             int[, ] matricePerf = initialiseMatricePerformance ();
-            int[, ] matriceSeuils = initialiseMatriceSeuils ();
-            double[, ] matriceConcordance = calculeMatriceConcordance (matricePerf, matriceSeuils, nbProjets, nbCriteres);
-            double[, ] matriceDiscordance = calculeMatriceDiscordance (matricePerf, matriceSeuils, nbProjets, nbCriteres);
-            double[, ] matriceCredibilite = calculeMatriceCredibilite (matriceConcordance, matriceDiscordance, matricePerf, matriceSeuils, nbProjets, nbProjets);
-            int[, ] matriceSurclassement = calculeMatriceSurclassement (matriceCredibilite, nbProjets);
-            List<int> dejaClasses = new List<int> ();
-            Dictionary<int, int> qualifs = calculeQualifs (matriceSurclassement, nbProjets, dejaClasses);
             afficheMatrice (matricePerf, nbProjets, nbCriteres);
             Console.WriteLine ();
+
+            int[, ] matriceSeuils = initialiseMatriceSeuils ();
             afficheMatrice (matriceSeuils, nbSeuils, nbCriteres);
             Console.WriteLine ();
+
+            double[, ] matriceConcordance = calculeMatriceConcordance (matricePerf, matriceSeuils, nbProjets, nbCriteres);
             afficheMatrice (matriceConcordance, nbProjets, nbProjets);
             Console.WriteLine ();
+
+            double[, ] matriceDiscordance = calculeMatriceDiscordance (matricePerf, matriceSeuils, nbProjets, nbCriteres);
             afficheMatrice (matriceDiscordance, nbProjets, nbProjets);
             Console.WriteLine ();
+
+            double[, ] matriceCredibilite = calculeMatriceCredibilite (matriceConcordance, matriceDiscordance, matricePerf, matriceSeuils, nbProjets, nbProjets);
             afficheMatrice (matriceCredibilite, nbProjets, nbProjets);
             Console.WriteLine ();
+
+            int[, ] matriceSurclassement = calculeMatriceSurclassement (matriceCredibilite, nbProjets);
             afficheMatrice (matriceSurclassement, nbProjets, nbProjets);
             Console.WriteLine ();
+
+            List<int> dejaClasses = new List<int> ();
+            Dictionary<int, int> qualifs = calculeQualifs (matriceSurclassement, nbProjets, dejaClasses);
             foreach (KeyValuePair<int, int> element in qualifs) {
                 Console.WriteLine ("Projet: {0}, valeur de qualif: {1}", element.Key, element.Value);
             }
             Console.WriteLine ();
-            Console.WriteLine("Qualif min: " + calculeQualifMinMax(qualifs, Math.Min));
-            Console.WriteLine("Qualif max: " + calculeQualifMinMax(qualifs, Math.Max));
+            Console.WriteLine ("Qualif min: " + calculeQualifMinMax (qualifs, Math.Min));
+            Console.WriteLine ("Qualif max: " + calculeQualifMinMax (qualifs, Math.Max));
+
+            /*List<List<int>> projets = initialiseListeProjets (nbProjets);
+            distillationAscendante (projets, qualifs, matriceSurclassement, nbProjets);
+            foreach (List<int> liste in projets) {
+                if (liste.Count > 1) {
+                    foreach (int element in liste) {
+                        Console.Write ("P" + element + ", ");
+                    }
+                } else {
+                    Console.Write ("P" + liste[0]);
+                }
+                Console.Write (" => ");
+            }*/
+            Console.WriteLine ();
+            int[, ] newMatriceSurclassement = supprimeElementsMatrice (matriceSurclassement, nbProjets, 1);
+            afficheMatrice (newMatriceSurclassement, nbProjets - 1, nbProjets - 1);
+            Console.WriteLine ();
         }
     }
 }
