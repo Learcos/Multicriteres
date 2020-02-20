@@ -12,10 +12,10 @@ namespace Multicritères
         static int nbCriteres;
         static int[,] matricePerf;
         static int[,] matriceSeuils;
-        static readonly string rootFolder = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\";
-        static readonly string exemple1 = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\exemple1.txt";
-        static readonly string exemple2 = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\exemple2.txt";
-        static readonly string exemple3 = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\exemple3.txt";
+        static readonly string rootFolder = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres";
+        static readonly string exemple1 = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\exemple1.txt";
+        static readonly string exemple2 = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\exemple2.txt";
+        static readonly string exemple3 = @"C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\exemple3.txt";
 
         public static void initialisation(string chemin)
         {
@@ -314,133 +314,6 @@ namespace Multicritères
             return qualifMinMax;
         }
 
-        /*public static List<List<int>> distillationAscendante (List<List<int>> projets, Dictionary<int, int> qualifs, int[, ] matriceSurclassement, int nbProjets) {
-            List<List<int>> projetsClasses = new List<List<int>> ();
-            List<int> rangsProjetsClasses = new List<int> ();
-            List<List<int>> projetsResiduels = new List<List<int>> ();
-            List<int> rangsProjetsResiduels = new List<int> ();
-            Dictionary<int, int> newQualifs = new Dictionary<int, int> ();
-
-            int qualifMin = calculeQualifMinMax (qualifs, Math.Min);
-
-            //classement des projets de + faible qualification dans rangsProjetsClasses
-            foreach (KeyValuePair<int, int> element in qualifs) {
-                if (element.Value == qualifMin) {
-                    rangsProjetsClasses.Add (element.Key);
-                } else {
-                    rangsProjetsResiduels.Add (element.Key);
-                }
-            }
-            if (rangsProjetsClasses.Count > 0) {
-                //si 1 seul projet est à la qualification min
-                if (rangsProjetsClasses.Count == 1) {
-                    //on le classe
-                    projetsClasses.Add (rangsProjetsClasses);
-                    foreach (int item in rangsProjetsResiduels) {
-                        List<int> listTemp = new List<int> ();
-                        listTemp.Add (item);
-                        projetsResiduels.Add (listTemp);
-                    }
-                    //on recalcule les qualifications en évitant les projets déjà classés
-                    newQualifs = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsClasses);
-                    //on fait la même chose pour les projets residuels
-                    do {
-                        distillationAscendante (projetsResiduels, newQualifs, matriceSurclassement, nbProjets);
-                    } while (rangsProjetsClasses.Count < nbProjets);
-                }
-                //si plusieurs projets ont la qualif min, on cherche à les distiller entre eux
-                else {
-                    //on recalcule les qualifications pour l'ensemble des projetsClasses
-                    //càd en évitant les projetsResiduels
-                    Dictionary<int, int> newQualifs2 = new Dictionary<int, int> ();
-                    Dictionary<int, int> newQualifs3 = new Dictionary<int, int> ();
-                    newQualifs2 = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsResiduels);
-                    //on cherche à savoir si toutes les valeurs de qualification sont les mêmes
-                    //auquel cas on ne distille plus les projets
-                    int firstQualifValue = newQualifs2.First ().Value;
-                    bool valeursToutesEgales = true;
-                    foreach (KeyValuePair<int, int> element in newQualifs2) {
-                        if (element.Value != firstQualifValue) {
-                            valeursToutesEgales = false;
-                            break;
-                        }
-                    }
-                    if (valeursToutesEgales) {
-                        projetsClasses.Add (rangsProjetsClasses);
-                        foreach (int item in rangsProjetsResiduels) {
-                            List<int> listTemp = new List<int> ();
-                            listTemp.Add (item);
-                            projetsResiduels.Add (listTemp);
-                        }
-                        //on recalcule les qualifications en évitant les projets déjà classés
-                        newQualifs3 = calculeQualifs (matriceSurclassement, nbProjets, rangsProjetsClasses);
-                        //on fait la même chose pour les projets residuels
-                        do {
-                            distillationAscendante (projetsResiduels, newQualifs3, matriceSurclassement, nbProjets);
-                        } while (!valeursToutesEgales && rangsProjetsClasses.Count > 1);
-                    } else {
-                        do {
-                            distillationAscendante (projetsClasses, newQualifs2, matriceSurclassement, nbProjets);
-                        } while (!valeursToutesEgales && rangsProjetsClasses.Count > 1);
-                    }
-                }
-            }
-            //projets <- projets - projetsClasses
-            projets = projetsClasses;
-        }
-
-        public static int[,] supprimeElementsMatrice(int[,] matrice, int matriceSize, int rank)
-        {
-            int[,] newMatrice = new int[matriceSize - 1, matriceSize - 1];
-            int ligne = 0;
-            int colonne = 0;
-
-            for (int i = 0; i < matriceSize; i++)
-            {
-                if (i != rank)
-                {
-                    if (i < rank) ligne = i;
-                    else ligne = i - 1;
-                    for (int j = 0; j < matriceSize; j++)
-                    {
-                        if (j != rank)
-                        {
-                            if (j < rank) colonne = j;
-                            else colonne = j - 1;
-                            newMatrice[ligne, colonne] = matrice[i, j];
-                        }
-                    }
-                }
-            }
-            return newMatrice;
-        }
-
-        public static double[,] supprimeElementsMatrice(double[,] matrice, int matriceSize, int rank)
-        {
-            double[,] newMatrice = new double[matriceSize - 1, matriceSize - 1];
-            int ligne = 0;
-            int colonne = 0;
-
-            for (int i = 0; i < matriceSize; i++)
-            {
-                if (i != rank)
-                {
-                    if (i < rank) ligne = i;
-                    else ligne = i - 1;
-                    for (int j = 0; j < matriceSize; j++)
-                    {
-                        if (j != rank)
-                        {
-                            if (j < rank) colonne = j;
-                            else colonne = j - 1;
-                            newMatrice[ligne, colonne] = matrice[i, j];
-                        }
-                    }
-                }
-            }
-            return newMatrice;
-        }*/
-
         public static void distillationAscDesc(int[,] matriceSurclassement, int nbProjets, List<List<int>> projetsClasses, List<int> rangsA_EviterMode0, List<int> rangsA_EviterMode1, int nbRangsTotalMode1, int nbRangsActuelMode1, int modeDeTravail, Func<int, int, int> function)
         {
             List<int> rangsProjetsA_Classes = new List<int>();
@@ -481,6 +354,7 @@ namespace Multicritères
                     //on le classe
                     projetsClasses.Add(rangsProjetsA_Classes);
                     rangsA_EviterMode0.Add(rangsProjetsA_Classes[0]);
+                    rangsA_EviterMode1.Add(rangsProjetsA_Classes[0]);
                     if (modeDeTravail == 1)
                     {
                         nbRangsActuelMode1 += rangsProjetsA_Classes.Count;
@@ -508,9 +382,15 @@ namespace Multicritères
                     //on cherche à savoir si toutes les valeurs de qualification sont les mêmes
                     //auquel cas on ne distille plus les projets
                     Dictionary<int, int> newQualifs = new Dictionary<int, int>();
+                    //on ajoute provisoirement les qualifs à rangsAEviterMode0 le temps du calcul des nouvelles qualifs
+                    List<int> rangsA_EviterTemp = rangsA_EviterMode1;
+                    foreach (int elem in rangsA_EviterMode0)
+                    {
+                        rangsA_EviterTemp.Add(elem);
+                    }
                     switch (modeDeTravail)
                     {
-                        case 0: newQualifs = calculeQualifs(matriceSurclassement, nbProjets, rangsA_EviterMode0); break;
+                        case 0: newQualifs = calculeQualifs(matriceSurclassement, nbProjets, rangsA_EviterTemp); break;
                         case 1: newQualifs = calculeQualifs(matriceSurclassement, nbProjets, rangsA_EviterMode1); break;
                     }
 
@@ -533,6 +413,7 @@ namespace Multicritères
                         foreach (int elem in rangsProjetsA_Classes)
                         {
                             rangsA_EviterMode0.Add(elem);
+                            rangsA_EviterMode1.Add(elem);
                         }
                         if (modeDeTravail == 1)
                         {
@@ -612,6 +493,7 @@ namespace Multicritères
             return projetsClasses;
         }
 
+        //pour la distillation on ordonne les projets en décroissant selon la différence entre le nombre de projets dominés et le nombre de projets par lequel le projet est dominé
         public static List<List<int>> distillation(int[,] matriceSurclassement, int nbProjets)
         {
             List<List<int>> distiAscendante = distillationAscendante(matriceSurclassement, nbProjets);
@@ -651,7 +533,6 @@ namespace Multicritères
                 disti.Add(kvp.Key, kvp.Value - distiAsc[kvp.Key]);
             }
 
-
             do
             {
                 var items = from pair in disti
@@ -659,12 +540,15 @@ namespace Multicritères
                             select pair;
                 List<int> listeA_Placer = new List<int>();
                 int maxValue = items.First().Value;
-                foreach(KeyValuePair<int, int> elem in disti){
-                    if(elem.Value == maxValue){
+                foreach (KeyValuePair<int, int> elem in disti)
+                {
+                    if (elem.Value == maxValue)
+                    {
                         listeA_Placer.Add(elem.Key);
                     }
                 }
-                foreach(int rang in listeA_Placer){
+                foreach (int rang in listeA_Placer)
+                {
                     disti.Remove(rang);
                 }
                 distillation.Add(listeA_Placer);
@@ -699,7 +583,8 @@ namespace Multicritères
             Console.WriteLine();
         }
 
-        public static void afficheDistillation(List<List<int>> distillation){
+        public static void afficheDistillation(List<List<int>> distillation)
+        {
             int compteur = 1;
             foreach (List<int> liste in distillation)
             {
@@ -709,7 +594,7 @@ namespace Multicritères
                     foreach (int element in liste)
                     {
                         Console.Write("P" + element);
-                        if(i < liste.Count) Console.Write(", ");
+                        if (i < liste.Count) Console.Write(", ");
                         i++;
                     }
                 }
@@ -717,22 +602,20 @@ namespace Multicritères
                 {
                     Console.Write("P" + liste[0]);
                 }
-                if(compteur < distillation.Count) Console.Write(" => ");
+                if (compteur < distillation.Count) Console.Write(" => ");
                 compteur++;
             }
             Console.WriteLine();
         }
 
-        static void Main(string[] args)
+        public static void executionProgramme(string chemin)
         {
-            initialisation(exemple1);
+            initialisation(chemin);
             Console.WriteLine("Nb projets: " + nbProjets);
             Console.WriteLine("Nb criteres: " + nbCriteres);
             Console.WriteLine();
 
             afficheMatrice(matricePerf, nbProjets, nbCriteres);
-            Console.WriteLine();
-
             afficheMatrice(matriceSeuils, nbSeuils, nbCriteres);
 
             double[,] matriceConcordance = calculeMatriceConcordance(matricePerf, matriceSeuils, nbProjets, nbCriteres);
@@ -741,7 +624,7 @@ namespace Multicritères
             double[,] matriceDiscordance = calculeMatriceDiscordance(matricePerf, matriceSeuils, nbProjets, nbCriteres);
             afficheMatrice(matriceDiscordance, nbProjets, nbProjets);
 
-            double[,] matriceCredibilite = calculeMatriceCredibilite(matriceConcordance, matriceDiscordance, matricePerf, matriceSeuils, nbProjets, nbProjets);
+            double[,] matriceCredibilite = calculeMatriceCredibilite(matriceConcordance, matriceDiscordance, matricePerf, matriceSeuils, nbProjets, nbCriteres);
             afficheMatrice(matriceCredibilite, nbProjets, nbProjets);
 
             int[,] matriceSurclassement = calculeMatriceSurclassement(matriceCredibilite, nbProjets);
@@ -762,6 +645,13 @@ namespace Multicritères
             List<List<int>> disti = distillation(matriceSurclassement, nbProjets);
             Console.Write("Distillation: ");
             afficheDistillation(disti);
+        }
+
+
+        static void Main(string[] args)
+        {
+            //on peut choisir exemple1, 2 ou 3
+            executionProgramme(exemple3);
         }
     }
 }
