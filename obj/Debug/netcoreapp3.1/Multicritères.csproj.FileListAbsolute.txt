@@ -9,3 +9,14 @@ C:\Users\ORLANDI\Multicritères\obj\Debug\netcoreapp3.1\Multicritères.AssemblyI
 C:\Users\ORLANDI\Multicritères\obj\Debug\netcoreapp3.1\Multicritères.AssemblyInfo.cs
 C:\Users\ORLANDI\Multicritères\obj\Debug\netcoreapp3.1\Multicritères.dll
 C:\Users\ORLANDI\Multicritères\obj\Debug\netcoreapp3.1\Multicritères.pdb
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\bin\Debug\netcoreapp3.1\Multicritères.exe
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\bin\Debug\netcoreapp3.1\Multicritères.deps.json
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\bin\Debug\netcoreapp3.1\Multicritères.runtimeconfig.json
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\bin\Debug\netcoreapp3.1\Multicritères.runtimeconfig.dev.json
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\bin\Debug\netcoreapp3.1\Multicritères.dll
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\bin\Debug\netcoreapp3.1\Multicritères.pdb
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\obj\Debug\netcoreapp3.1\Multicritères.csprojAssemblyReference.cache
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\obj\Debug\netcoreapp3.1\Multicritères.AssemblyInfoInputs.cache
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\obj\Debug\netcoreapp3.1\Multicritères.AssemblyInfo.cs
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\obj\Debug\netcoreapp3.1\Multicritères.dll
+C:\Users\lucaa\OneDrive\Documents\M2\Multicritères\Multicriteres\obj\Debug\netcoreapp3.1\Multicritères.pdb

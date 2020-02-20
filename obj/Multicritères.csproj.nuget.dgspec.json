@@ -1,24 +1,34 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\ORLANDI\\Multicritères\\Multicritères.csproj": {}
+    "C:\\Users\\lucaa\\OneDrive\\Documents\\M2\\Multicritères\\Multicriteres\\Multicritères.csproj": {}
   },
   "projects": {
-    "c:\\Users\\ORLANDI\\Multicritères\\Multicritères.csproj": {
+    "C:\\Users\\lucaa\\OneDrive\\Documents\\M2\\Multicritères\\Multicriteres\\Multicritères.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\ORLANDI\\Multicritères\\Multicritères.csproj",
+        "projectUniqueName": "C:\\Users\\lucaa\\OneDrive\\Documents\\M2\\Multicritères\\Multicriteres\\Multicritères.csproj",
         "projectName": "Multicritères",
-        "projectPath": "c:\\Users\\ORLANDI\\Multicritères\\Multicritères.csproj",
-        "packagesPath": "C:\\Users\\ORLANDI\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\ORLANDI\\Multicritères\\obj\\",
+        "projectPath": "C:\\Users\\lucaa\\OneDrive\\Documents\\M2\\Multicritères\\Multicriteres\\Multicritères.csproj",
+        "packagesPath": "C:\\Users\\lucaa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lucaa\\OneDrive\\Documents\\M2\\Multicritères\\Multicriteres\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\ORLANDI\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\lucaa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {}
@@ -47,7 +57,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
