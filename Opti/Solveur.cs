@@ -4,7 +4,7 @@
     using System.Linq;
 namespace Opti
 {
-    public class Solveur
+    public class Solver
     {
 
         private int _nbSeuils;
@@ -144,11 +144,13 @@ namespace Opti
             }
         }
 
-        private Solveur() {
+        private Solver() {
 
         }
 
-        public Solveur(string path, int nbSeuils) {
+        public Solver(string path, int nbSeuils) {
+            _nbSeuils = nbSeuils;
+
             if (File.Exists(path)) {
                 bool arriveA_MatricePerf = false;
                 bool arriveA_MatriceSeuils = false;
@@ -203,8 +205,6 @@ namespace Opti
             else {
                 throw new Exception("File not found");
             }
-
-            _nbSeuils = nbSeuils;
         }
 
         public void reset() {
