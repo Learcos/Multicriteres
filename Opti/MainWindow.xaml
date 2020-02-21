@@ -24,8 +24,8 @@
                 <MenuItem Header="_Ouvrir" Click="Ouvrir_Click"/>
                 <MenuItem Header="_Quiter" Click="MenuItem_Click"/>
             </MenuItem>
-            <MenuItem Header="_à propos">
-                <MenuItem Header="_infos"/>
+            <MenuItem Header="_À propos">
+                <MenuItem Header="_Infos"/>
             </MenuItem>
         </Menu>
 

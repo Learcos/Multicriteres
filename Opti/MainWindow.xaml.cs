@@ -66,13 +66,13 @@ namespace Opti
 
         private void updateDistilations() {
             label_distilation.Visibility = Visibility.Visible;
-            label_distilation.Content = "Distilation déscendante : " + afficheDistillation(solveur.disilation);
+            label_distilation.Content = "Distillation descendante : " + afficheDistillation(solveur.disilation);
 
             label_distilationAscendante.Visibility = Visibility.Visible;
-            label_distilationAscendante.Content = "Distilation ascendante : " + afficheDistillation(solveur.distillationAscendante);
+            label_distilationAscendante.Content = "Distillation ascendante : " + afficheDistillation(solveur.distillationAscendante);
 
             label_distilationDescendante.Visibility = Visibility.Visible;
-            label_distilationDescendante.Content = "Distilation : " + afficheDistillation(solveur.distillationDescendante);
+            label_distilationDescendante.Content = "Distillation : " + afficheDistillation(solveur.distillationDescendante);
         }
 
         private void setPerf() {
