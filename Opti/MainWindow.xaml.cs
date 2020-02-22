@@ -14,13 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 
-namespace Opti
-{
+namespace Opti {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
         private Solver solveur = null;
 
         public MainWindow() {
@@ -40,8 +38,7 @@ namespace Opti
                         }
                         i++;
                     }
-                }
-                else {
+                } else {
                     res += "P" + liste[0].ToString();
                 }
                 if (compteur < distillation.Count) {
@@ -81,10 +78,10 @@ namespace Opti
             dataGrid.IsReadOnly = true;
         }
 
-         private void setSeuils() {
+        private void setSeuils() {
             dataGrid.ItemsSource = Helper.GetBindable2DArray<int>(solveur.matriceSeuils);
             label_titre.Content = "Matrice de seuils";
-            dataGrid.IsReadOnly = false ;
+            dataGrid.IsReadOnly = false;
             solveur.reset();
         }
 
@@ -121,13 +118,13 @@ namespace Opti
         }
 
         private void button_pref_Click(object sender, RoutedEventArgs e) {
-            if(solveur != null) {
+            if (solveur != null) {
                 setPerf();
             }
         }
 
         private void button_seuils_Click(object sender, RoutedEventArgs e) {
-            if(solveur != null) {
+            if (solveur != null) {
                 setSeuils();
             }
         }
