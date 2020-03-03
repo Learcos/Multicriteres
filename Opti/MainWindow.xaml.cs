@@ -130,19 +130,27 @@ namespace Opti {
         }
 
         private void button_concordance_Click(object sender, RoutedEventArgs e) {
-            setConcordance();
+            if (solveur != null) {
+                setConcordance();
+            }
         }
 
         private void button_discordance_Click(object sender, RoutedEventArgs e) {
-            setDiscordance();
+            if (solveur != null) {
+                setDiscordance();
+            }
         }
 
         private void button_credibilite_Click(object sender, RoutedEventArgs e) {
-            setCredibilité();
+            if (solveur != null) {
+                setCredibilité();
+            }
         }
 
         private void button_surclassement_Click(object sender, RoutedEventArgs e) {
-            setSurclassement();
+            if (solveur != null) {
+                setSurclassement();
+            }
         }
 
         private void dataGrid_CurrentCellChanged(object sender, EventArgs e) {
