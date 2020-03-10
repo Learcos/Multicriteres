@@ -23,7 +23,7 @@
                 <MenuItem Header="_Quiter" Click="MenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="_À propos">
-                <MenuItem Header="_Infos"/>
+                <MenuItem Header="_Infos" Click="MenuItem_Click_1"/>
             </MenuItem>
         </Menu>
 

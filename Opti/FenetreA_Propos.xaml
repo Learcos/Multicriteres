@@ -1,0 +1,14 @@
+﻿<Window x:Class="Opti.FenetreA_Propos"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Opti"
+        mc:Ignorable="d"
+        Title="A Propos" Height="126" Width="406">
+    <Grid>
+        <Button x:Name="button" Content="OK" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="52" Click="button_Click"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Center" Margin="10,10,0,0" Text="Projet sur le solveur Electre III réalisé par Luca Orlandi et Julien Lafille en 2020" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextAlignment="Justify" IsReadOnly="True"/>
+
+    </Grid>
+</Window>

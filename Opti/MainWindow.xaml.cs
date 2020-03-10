@@ -161,5 +161,10 @@ namespace Opti {
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
         }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e) {
+            Window info = new FenetreA_Propos();
+            info.Show();
+        }
     }
 }
